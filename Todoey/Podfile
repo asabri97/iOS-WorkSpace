@@ -7,6 +7,7 @@ target 'Todoey' do
 
 pod 'RealmSwift', '~> 3.17', :modular_headers => true
 pod 'Realm', '~> 3.17', :modular_headers => true
-
+pod 'SwipeCellKit'
+pod 'ChameleonFramework/Swift',:git => 'https://github.com/ViccAlexander/Chameleon.git'
 
 end
