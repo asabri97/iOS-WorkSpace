@@ -20,7 +20,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         
         imagePicker.delegate = self
-        imagePicker.sourceType = .photoLibrary
+        imagePicker.sourceType = .camera
         imagePicker.allowsEditing = false
     }
     
@@ -50,6 +50,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             guard let results = request.results as? [VNClassificationObservation] else { fatalError("Model failed to process Image")}
             
             if let firstResult = results.first{
+                //self.navigationItem.title = firstResult.identifier
                 if firstResult.identifier.contains("keyboard") {
                     self.navigationItem.title = "Keyboard!"
                 } else {
