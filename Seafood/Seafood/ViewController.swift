@@ -13,7 +13,6 @@ import Vision
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     @IBOutlet weak var imageView: UIImageView!
     
-    
     let imagePicker = UIImagePickerController()
     
     override func viewDidLoad() {
@@ -40,30 +39,33 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     func detect(image: CIImage){
-        guard let model = try? VNCoreMLModel(for: YOLOv3Tiny().model) else {
+        self.navigationItem.title = "Detecting..."
+        guard let model = try? VNCoreMLModel(for: MobileNet().model) else {
             fatalError("Loading CoreML Model Failed.")
         }
         
-        let request = VNCoreMLRequest(model: model) {
-            (request, error) in
+        let request = VNCoreMLRequest(model: model, completionHandler: {
+            request, error in
+            
             guard let results = request.results as? [VNClassificationObservation] else { fatalError("Model failed to process Image")}
             
             if let firstResult = results.first{
                 if firstResult.identifier.contains("keyboard") {
                     self.navigationItem.title = "Keyboard!"
-                }else {
+                } else {
                     self.navigationItem.title = "Not a keyboard!"
                 }
+            } else {
+                self.navigationItem.title = "Could not find anything!"
             }
-            
-            
-        }
-       let handler = VNImageRequestHandler(ciImage: image)
-        do {
-            try handler.perform([request])
-        }catch {
-            print(error)
-        }
+        })
+        
+        let handler = VNImageRequestHandler(ciImage: image)
+             do {
+                 try handler.perform([request])
+             } catch {
+                 print(error)
+             }
     }
 
     @IBAction func cameraTapped(_ sender: UIBarButtonItem) {
